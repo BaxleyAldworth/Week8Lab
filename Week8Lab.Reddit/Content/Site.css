@@ -33,12 +33,16 @@ textarea {
 }
 .postimage {
     float:left;
+    padding: 10px;
 }
 
 .postinfo {
     float:left;
+    
+    font-size: 150%
 }
 
 .postmessage {
     float:left;
+    padding: 10px;
 }
