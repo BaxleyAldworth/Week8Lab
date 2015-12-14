@@ -29,5 +29,8 @@ namespace Week8Lab.Reddit.Models
         {
             return new ApplicationDbContext();
         }
+
+        public virtual DbSet<Post> Posts { get; set; }
     }
+
 }

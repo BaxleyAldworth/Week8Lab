@@ -16,5 +16,6 @@ namespace Week8Lab.Reddit.Models
         [NotMapped]
         public int Popularity { get { return Up - Down; } }
         public DateTime PostDate { get; set; }
+        public string Image { get; set; }
     }
 }
