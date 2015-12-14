@@ -1,63 +1,53 @@
 ﻿@model IEnumerable<Week8Lab.Reddit.Models.Post>
-
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Posts";
 }
-
-<h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New Post", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Message)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Up)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Down)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PostDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Image)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Message)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Up)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Down)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PostDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Image)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.PostId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.PostId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.PostId })
-        </td>
-    </tr>
+@foreach (var item in Model.OrderByDescending(x => x.Popularity))
+{
+
+    <div class="post">
+        <div class="postrank" data-postid="@item.PostId">
+            <span class="glyphicon glyphicon-thumbs-up up" aria-hidden="true"></span>
+            <br />
+            <span class="votes">@item.Popularity</span>
+            <br />
+            <span class="glyphicon glyphicon-thumbs-down down" aria-hidden="true"></span>
+
+        </div>
+        <div class="postimage">
+            <img width="50" src="@item.Image" />
+        </div>
+        <div class="postinfo">
+            <span>@item.Title</span>
+        </div>
+    </div>
 }
+@section scripts{
 
-</table>
+    <script>
+        $(document).ready(function () {
+            $("span.up, span.down").click(function () {
+                var that = $(this);
+                var id = that.parent().data("postid");
+
+                var posturl = "@Url.Action("upvote")";
+                if (that.hasClass("down"))
+                    posturl = "@Url.Action("downvote")";
+
+                $.ajax({
+                    url: posturl,
+                    data: { postid: id }
+                }).success(function (msg) {
+                    that.siblings("span.votes").html(msg);
+                });
+            });
+        });
+
+    </script>
+
+}
